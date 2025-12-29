@@ -1,0 +1,67 @@
+import requests
+from datetime import datetime, timedelta
+
+def parse_codechef_datetime(s):
+    s = " ".join(s.split())
+    for fmt in ("%Y-%m-%d %H:%M:%S", "%d %b %Y %H:%M:%S"):
+        try:
+            return datetime.strptime(s, fmt)
+        except ValueError:
+            pass
+    raise ValueError(f"Unknown CodeChef date format: {s}")
+
+
+def fetch_codeforces():
+    url = "https://codeforces.com/api/contest.list"
+    data = requests.get(url).json()
+
+    contests = []
+    for c in data["result"]:
+        start = datetime.fromtimestamp(c["startTimeSeconds"])
+        end = start + timedelta(seconds=c["durationSeconds"])
+
+        contests.append({
+            "platform": "Codeforces",
+            "name": c["name"],
+            "start_time": start,
+            "end_time": end,
+            "duration_min": c["durationSeconds"] // 60,
+            "url": f"https://codeforces.com/contest/{c['id']}"
+        })
+    return contests
+
+
+def fetch_codechef():
+    url = "https://www.codechef.com/api/list/contests/all"
+    headers = {"User-Agent": "Mozilla/5.0"}
+
+    r = requests.get(url, headers=headers, timeout=10)
+    if r.status_code != 200:
+        return []
+
+    try:
+        data = r.json()
+    except Exception:
+        return []
+
+    contests = []
+
+    for c in data.get("present_contests", []) + data.get("future_contests", []):
+        start = parse_codechef_datetime(c["contest_start_date"])
+        duration = int(c["contest_duration"])
+        end = start + timedelta(minutes=duration)
+
+        contests.append({
+            "platform": "CodeChef",
+            "name": c["contest_name"],
+            "start_time": start,
+            "end_time": end,
+            "duration_min": duration,
+            "url": f"https://www.codechef.com/{c['contest_code']}"
+        })
+
+    return contests
+
+
+def fetch_atcoder():
+    return []
