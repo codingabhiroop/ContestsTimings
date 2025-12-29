@@ -76,27 +76,4 @@ def fetch_codechef():
 
 
 def fetch_atcoder():
-    url = "https://kenkoooo.com/atcoder/resources/contests.json"
-    data = requests.get(url).json()
-    now = datetime.now().timestamp()
-
-    contests = []
-    for c in data:
-        start = datetime.fromtimestamp(c["start_epoch_second"])
-        end = start + timedelta(seconds=c["duration_second"])
-
-        if c["start_epoch_second"] > now:
-            contest_url = "https://atcoder.jp/contests/"
-        else:
-            contest_url = f"https://atcoder.jp/contests/{c['id']}"
-
-        contests.append({
-            "platform": "AtCoder",
-            "name": c["title"],
-            "start_time": start,
-            "end_time": end,
-            "duration_min": c["duration_second"] // 60,
-            "url": contest_url
-        })
-
-    return contests
+    return []
