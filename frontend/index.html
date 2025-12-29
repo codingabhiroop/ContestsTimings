@@ -38,7 +38,6 @@
       margin-bottom: 36px;
     }
 
-    /* Filters */
     #filters {
       text-align: center;
       margin-bottom: 40px;
@@ -66,7 +65,6 @@
       border-color: var(--accent);
     }
 
-    /* Sections */
     .section {
       margin-bottom: 50px;
     }
@@ -78,7 +76,6 @@
       border-left: 4px solid var(--accent);
     }
 
-    /* Grid */
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -96,7 +93,6 @@
       border-color: var(--accent);
     }
 
-    /* Platform tag */
     .platform {
       display: inline-block;
       padding: 4px 10px;
@@ -166,7 +162,7 @@
 let allContests = [];
 let currentFilter = "All";
 
-function render(contests, targetId) {
+function render(contests, targetId, upcoming = false) {
   const el = document.getElementById(targetId);
   el.innerHTML = "";
 
@@ -176,13 +172,19 @@ function render(contests, targetId) {
   }
 
   contests.forEach(c => {
+    let url = c.url;
+    if (upcoming) {
+      if (c.platform === "Codeforces") url = "https://codeforces.com/contests";
+      if (c.platform === "CodeChef") url = "https://www.codechef.com/contests";
+    }
+
     const div = document.createElement("div");
     div.className = "contest";
     div.innerHTML = `
       <div class="platform ${c.platform}">${c.platform}</div>
       <div class="name">${c.name}</div>
       <div class="time">${new Date(c.start_time).toLocaleString()}</div>
-      <a href="${c.url}" target="_blank">View contest →</a>
+      <a href="${url}" target="_blank">View contest →</a>
     `;
     el.appendChild(div);
   });
@@ -205,7 +207,8 @@ function applyFilter() {
 
   render(
     filtered.filter(c => new Date(c.start_time) > now),
-    "upcoming"
+    "upcoming",
+    true
   );
 }
 
