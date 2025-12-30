@@ -23,7 +23,7 @@ The backend fetches contests from:
 
 1. **Codeforces API** – [https://codeforces.com/apiHelp](https://codeforces.com/apiHelp)  
 2. **CodeChef API** – [https://www.codechef.com/api/list/contests/all](https://www.codechef.com/api/list/contests/all)  
-3. **AtCoder JSON Endpoint** – [https://kenkoooo.com/atcoder/resources/contests.json](https://kenkoooo.com/atcoder/resources/contests.json)  
+3. **AtCoder JSON Endpoint** – (Ongoing...)
 
 The **FastAPI backend** provides a `/contests` endpoint that serves the contest data.  
 The **frontend** fetches this data and displays it with **filters**, **sections for ongoing/upcoming contests**, and a **clean, responsive layout**.
